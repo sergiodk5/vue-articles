@@ -1,5 +1,5 @@
 <template>
-  <h1>Hello Vue</h1>
+  <h1 class="text-3xl font-bold underline">Hello Tailwind</h1>
 </template>
 
 <script>
