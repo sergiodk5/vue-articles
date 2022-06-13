@@ -1,6 +1,8 @@
 <template>
-  <form class="bg-white">
-    <h3 class="text-gray-700 mb-4 text-xl sm:text-3xl text-center">Search worldwide news</h3>
+  <form class="bg-white" @submit.prevent="onSubmit">
+    <h3 class="text-gray-700 mb-4 text-xl sm:text-3xl text-center">
+      Search worldwide news
+    </h3>
     <div class="flex">
       <label
         for="search-articles"
@@ -13,6 +15,7 @@
           id='search-articles"'
           class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
           placeholder="Search for articles"
+          v-model="searchInput"
         />
         <button
           type="submit"
@@ -39,4 +42,23 @@
 </template>
 
 <script>
+import { ref } from 'vue'
+import useArticles from '../composables/articles'
+
+export default {
+  setup() {
+    const { query, setQuery } = useArticles()
+    const searchInput = ref(query.value)
+
+    const onSubmit = () => {
+      console.log('submit')
+      setQuery(searchInput.value)
+    }
+
+    return {
+      onSubmit,
+      searchInput,
+    }
+  },
+}
 </script>

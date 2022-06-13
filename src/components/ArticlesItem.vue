@@ -48,6 +48,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { computed } from '@vue/reactivity'
 

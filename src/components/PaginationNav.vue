@@ -1,9 +1,9 @@
 <template>
   <nav aria-label="Page navigation" class="my-4">
     <ul class="inline-flex items-center -space-x-px">
-      <li>
-        <a
-          href="#"
+      <li v-if="totalPages > 1 && 1 !== page">
+        <span
+          @click="goToStart"
           class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
         >
           <span class="sr-only">Previous</span>
@@ -19,47 +19,42 @@
               clip-rule="evenodd"
             ></path>
           </svg>
-        </a>
+        </span>
       </li>
-      <li>
-        <a
-          href="#"
-          class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-          >1</a
-        >
+
+      <li v-if="totalPages < 6" v-for="btn in totalPages" :key="btn">
+        <PaginationBtn :btn="btn" />
       </li>
-      <li>
-        <a
-          href="#"
-          class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-          >2</a
-        >
+
+      <li v-if="totalPages > 6 && 3 > page" v-for="btn in 3" :key="btn">
+        <PaginationBtn :btn="btn" />
       </li>
-      <li>
-        <a
-          href="#"
-          aria-current="page"
-          class="z-10 py-2 px-3 leading-tight text-blue-600 bg-blue-50 border border-blue-300 hover:bg-blue-100 hover:text-blue-700"
-          >3</a
-        >
+      <li v-if="totalPages > 6 && 3 > page">
+        <span class="px-2">...</span>
       </li>
-      <li>
-        <a
-          href="#"
-          class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-          >4</a
-        >
+      <li v-if="totalPages > 6 && 3 > page" v-for="btn in rangeFromTo(totalPages - 3, totalPages)" :key="btn">
+        <PaginationBtn :btn="btn" />
       </li>
-      <li>
-        <a
-          href="#"
-          class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-          >5</a
-        >
+
+      <li v-if="totalPages > 6 && 3 <= page">
+        <PaginationBtn :btn="1" />
       </li>
-      <li>
-        <a
-          href="#"
+      <li v-if="totalPages > 6 && 3 <= page">
+        <span class="px-2">...</span>
+      </li>
+      <li v-if="totalPages > 6 && 3 <= page" v-for="btn in aroundNumber(page)" :key="btn">
+        <PaginationBtn :btn="btn" />
+      </li>
+      <li v-if="totalPages > 6 && 3 <= page">
+        <span class="px-2">...</span>
+      </li>
+      <li v-if="totalPages > 6 && 3 <= page">
+        <PaginationBtn :btn="totalPages" />
+      </li>
+
+      <li v-if="page !== totalPages">
+        <span
+          @click="goToEnd"
           class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
         >
           <span class="sr-only">Next</span>
@@ -75,9 +70,50 @@
               clip-rule="evenodd"
             ></path>
           </svg>
-        </a>
+        </span>
       </li>
+
     </ul>
   </nav>
 </template>
-<script></script>
+<script>
+import { computed, onMounted } from 'vue'
+import useArticles from '../composables/articles'
+import PaginationBtn from './PaginationBtn.vue'
+
+export default {
+  components: { PaginationBtn },
+  setup() {
+    const { total, pageSize, page, setPage } = useArticles()
+    const totalPages = computed(() => Math.ceil(total.value / pageSize.value))
+
+    onMounted(() => console.log('page', page.value))
+
+    const goToStart = () => setPage(1)
+    const goToEnd = () => setPage(totalPages.value)
+    const goTo = (no) => setPage(no)
+
+    const rangeFromTo = (start, end) => {
+      let rangeArr = []
+      for (let i = start; i < end; i++) {
+        rangeArr.push(i)
+      }
+
+      return rangeArr
+    }
+    const aroundNumber = (number) => {
+      return [number - 1, number, number + 1]
+    }
+
+    return {
+      totalPages,
+      goTo,
+      goToStart,
+      goToEnd,
+      page,
+      rangeFromTo,
+      aroundNumber,
+    }
+  },
+}
+</script>
