@@ -21,7 +21,7 @@
         >
       </h5>
       <div class="mb-4 text-muted text-xs text-gray-500">
-        by {{ article.author }} | at {{ publishedDate }}
+        <span v-if="article.author">by {{ article.author }} |</span> at {{ publishedDate }}
       </div>
       <p class="mb-3 font-normal text-gray-700">
         {{ article.description }}

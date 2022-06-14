@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="onSubmit">
+  <form class="max-w-4xl mx-auto" @submit.prevent="onSubmit">
     <h3 class="text-gray-700 mb-4 text-xl sm:text-3xl text-center">
       Search worldwide news
     </h3>
