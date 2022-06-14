@@ -4,8 +4,8 @@
       <div class="h-32 mb-4"></div>
 
       <div
-        class="fixed w-full left-0 flex justify-center items-center bg-white shadow transition-all ease-in-out duration-500 p-4"
-        :class="[!articles.length && !error ? 'top-1/2' : 'top-0']"
+        class="fixed w-full left-0 flex justify-center items-center transition-all ease-in-out duration-500 p-4"
+        :class="[!articles.length && !error ? 'top-1/2' : 'top-0 bg-white shadow']"
       >
         <div class="container mx-auto">
           <div class="mx-2">
