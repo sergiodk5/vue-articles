@@ -1,6 +1,5 @@
 <template>
   <select class="bg-gray-200 border-b border-gray-500 focus:ring-0 focus:outline-none" v-model="pageSize" @change="onChange">
-    <option value="1">1</option>
     <option value="5">5</option>
     <option value="10">10</option>
     <option value="20">20</option>

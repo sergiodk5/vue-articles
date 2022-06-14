@@ -6,6 +6,28 @@
           @click="goToStart"
           class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
         >
+          <span class="sr-only">start</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5"
+            fill="none"
+            viewBox="0 0 20 20"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+            />
+          </svg>
+        </span>
+      </li>
+      <li v-if="totalPages > 1 && 1 !== page">
+        <span
+          @click="goTo(page - 1)"
+          class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+        >
           <span class="sr-only">Previous</span>
           <svg
             class="w-5 h-5"
@@ -26,46 +48,46 @@
         <PaginationBtn :btn="btn" />
       </li>
 
-      <li v-if="totalPages > 6 && 3 > page" v-for="btn in 3" :key="btn">
+      <li
+        v-if="totalPages > 6 && 3 >= page"
+        v-for="btn in rangeFromTo(1, 4)"
+        :key="btn"
+      >
         <PaginationBtn :btn="btn" />
       </li>
-      <li v-if="totalPages > 6 && 3 > page">
+      <li v-if="totalPages > 6 && 3 >= page">
         <span class="px-2">...</span>
       </li>
-      <li v-if="totalPages > 6 && 3 > page" v-for="btn in rangeFromTo(totalPages - 2, totalPages)" :key="btn">
+
+      <li v-if="totalPages > 6 && 3 < page && page >= totalPages - 2">
+        <span class="px-2">...</span>
+      </li>
+      <li
+        v-if="totalPages > 6 && 3 < page && page >= totalPages - 2"
+        v-for="btn in rangeFromTo(totalPages - 3, totalPages)"
+        :key="btn"
+      >
         <PaginationBtn :btn="btn" />
       </li>
 
-      <li v-if="totalPages > 6 && 3 <= page && totalPages - 3 > page">
-        <PaginationBtn :btn="1" />
-      </li>
-      <li v-if="totalPages > 6 && 3 <= page && totalPages - 3 > page">
+      <li v-if="totalPages > 6 && 3 < page && page < totalPages - 2">
         <span class="px-2">...</span>
       </li>
-      <li v-if="totalPages > 6 && 3 <= page && totalPages - 3 > page" v-for="btn in aroundNumber(page)" :key="btn">
+      <li
+        v-if="totalPages > 6 && 3 < page && page < totalPages - 2"
+        v-for="btn in aroundNumber(page)"
+        :key="btn"
+      >
         <PaginationBtn :btn="btn" />
       </li>
-      <li v-if="totalPages > 6 && 3 <= page && totalPages - 3 > page">
+      <li v-if="totalPages > 6 && 3 < page && page < totalPages - 2">
         <span class="px-2">...</span>
-      </li>
-      <li v-if="totalPages > 6 && 3 <= page && totalPages - 3 > page">
-        <PaginationBtn :btn="totalPages" />
-      </li>
-
-      <li v-if="totalPages > 6 && totalPages - 2 <= page">
-        <PaginationBtn :btn="1" />
-      </li>
-      <li v-if="totalPages > 6 && totalPages - 2 <= page">
-        <span class="px-2">...</span>
-      </li>
-      <li v-if="totalPages > 6 && totalPages - 2 <= page" v-for="btn in rangeFromTo(totalPages - 3, totalPages)" :key="btn">
-        <PaginationBtn :btn="btn" />
       </li>
 
       <li v-if="page !== totalPages">
         <span
-          @click="goToEnd"
-          class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+          @click="goTo(page + 1)"
+          class="block py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
         >
           <span class="sr-only">Next</span>
           <svg
@@ -82,7 +104,28 @@
           </svg>
         </span>
       </li>
-
+      <li v-if="page !== totalPages">
+        <span
+          @click="goToEnd"
+          class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+        >
+          <span class="sr-only">Next</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M13 5l7 7-7 7M5 5l7 7-7 7"
+            />
+          </svg>
+        </span>
+      </li>
     </ul>
   </nav>
 </template>
@@ -95,7 +138,9 @@ export default {
   components: { PaginationBtn },
   setup() {
     const { total, pageSize, page, setPage } = useArticles()
-    const totalPages = computed(() => Math.ceil(total.value / pageSize.value))
+    const totalPages = computed(() =>
+      Math.ceil(total.value / pageSize.value)
+    )
 
     onMounted(() => {
       console.log('page', page.value)
