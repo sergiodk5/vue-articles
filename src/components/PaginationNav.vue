@@ -32,24 +32,34 @@
       <li v-if="totalPages > 6 && 3 > page">
         <span class="px-2">...</span>
       </li>
-      <li v-if="totalPages > 6 && 3 > page" v-for="btn in rangeFromTo(totalPages - 3, totalPages)" :key="btn">
+      <li v-if="totalPages > 6 && 3 > page" v-for="btn in rangeFromTo(totalPages - 2, totalPages)" :key="btn">
         <PaginationBtn :btn="btn" />
       </li>
 
-      <li v-if="totalPages > 6 && 3 <= page">
+      <li v-if="totalPages > 6 && 3 <= page && totalPages - 3 > page">
         <PaginationBtn :btn="1" />
       </li>
-      <li v-if="totalPages > 6 && 3 <= page">
+      <li v-if="totalPages > 6 && 3 <= page && totalPages - 3 > page">
         <span class="px-2">...</span>
       </li>
-      <li v-if="totalPages > 6 && 3 <= page" v-for="btn in aroundNumber(page)" :key="btn">
+      <li v-if="totalPages > 6 && 3 <= page && totalPages - 3 > page" v-for="btn in aroundNumber(page)" :key="btn">
         <PaginationBtn :btn="btn" />
       </li>
-      <li v-if="totalPages > 6 && 3 <= page">
+      <li v-if="totalPages > 6 && 3 <= page && totalPages - 3 > page">
         <span class="px-2">...</span>
       </li>
-      <li v-if="totalPages > 6 && 3 <= page">
+      <li v-if="totalPages > 6 && 3 <= page && totalPages - 3 > page">
         <PaginationBtn :btn="totalPages" />
+      </li>
+
+      <li v-if="totalPages > 6 && totalPages - 2 <= page">
+        <PaginationBtn :btn="1" />
+      </li>
+      <li v-if="totalPages > 6 && totalPages - 2 <= page">
+        <span class="px-2">...</span>
+      </li>
+      <li v-if="totalPages > 6 && totalPages - 2 <= page" v-for="btn in rangeFromTo(totalPages - 3, totalPages)" :key="btn">
+        <PaginationBtn :btn="btn" />
       </li>
 
       <li v-if="page !== totalPages">
@@ -87,7 +97,10 @@ export default {
     const { total, pageSize, page, setPage } = useArticles()
     const totalPages = computed(() => Math.ceil(total.value / pageSize.value))
 
-    onMounted(() => console.log('page', page.value))
+    onMounted(() => {
+      console.log('page', page.value)
+      console.log('total', totalPages.value)
+    })
 
     const goToStart = () => setPage(1)
     const goToEnd = () => setPage(totalPages.value)
@@ -95,7 +108,7 @@ export default {
 
     const rangeFromTo = (start, end) => {
       let rangeArr = []
-      for (let i = start; i < end; i++) {
+      for (let i = start; i <= end; i++) {
         rangeArr.push(i)
       }
 
